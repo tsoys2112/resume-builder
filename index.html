@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Конструктор резюме и портфолио</title>
+<meta name="description" content="Заполните анкету — ИИ Gemini напишет резюме и мини‑сайт портфолио. Шаблоны, цветовые темы, PDF.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/resume.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">CV</span><span>Конструктор резюме</span></div>
+  <nav class="mobile-tabs" role="tablist">
+    <button class="mtab active" data-pane="form">Анкета</button>
+    <button class="mtab" data-pane="resume">Резюме</button>
+    <button class="mtab" data-pane="site">Сайт</button>
+  </nav>
+  <div class="top-actions">
+    <button class="icon-btn" id="themeToggle" title="Светлая/тёмная тема интерфейса" aria-label="Тема интерфейса"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <button class="icon-btn" id="settingsBtn" title="Настройки ИИ" aria-label="Настройки"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- ============ FORM ============ -->
+  <section class="pane pane-form active" id="pane-form">
+    <div class="form-scroll">
+      <div class="card ai-card">
+        <div class="ai-head">
+          <div>
+            <h2>ИИ‑помощник Gemini</h2>
+            <p class="muted">Заполните анкету и нажмите кнопку — ИИ напишет профессиональное описание, выделит сильные стороны и перепишет опыт в виде достижений.</p>
+          </div>
+        </div>
+        <div class="row2">
+          <label>Язык резюме
+            <select id="cvLang">
+              <option value="ru">Русский</option>
+              <option value="en">English</option>
+              <option value="uz">O‘zbekcha</option>
+            </select>
+          </label>
+          <label>Тон
+            <select id="cvTone">
+              <option value="деловой, уверенный">Деловой</option>
+              <option value="современный, энергичный">Современный</option>
+              <option value="сдержанный, лаконичный">Лаконичный</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn primary big" id="aiBtn"><span class="spark">✦</span> <span class="lbl">Сгенерировать резюме с ИИ</span></button>
+        <div class="ai-status" id="aiStatus" hidden></div>
+      </div>
+
+      <form id="cvForm" autocomplete="on" onsubmit="return false">
+        <div class="card">
+          <h3>Основное</h3>
+          <div class="photo-row">
+            <label class="photo-drop" id="photoDrop" title="Загрузить фото">
+              <img id="photoPreview" alt="" hidden>
+              <span class="photo-ph">+ Фото</span>
+              <input type="file" id="photoInput" accept="image/*" hidden>
+            </label>
+            <div class="grow">
+              <label>Имя и фамилия <input name="name" placeholder="Иван Петров"></label>
+              <label>Должность <input name="title" placeholder="Руководитель отдела продаж"></label>
+              <button type="button" class="link-btn" id="photoRemove" hidden>Удалить фото</button>
+            </div>
+          </div>
+          <div class="row2">
+            <label>Дата рождения <input type="date" name="birth"></label>
+            <label>Город <input name="location" placeholder="Ташкент, Узбекистан"></label>
+          </div>
+          <label>О себе (черновик для ИИ)
+            <textarea name="about" rows="3" placeholder="Пару фраз о себе, целях, чем гордитесь — ИИ превратит это в профессиональное описание"></textarea>
+          </label>
+        </div>
+
+        <div class="card">
+          <h3>Контакты</h3>
+          <div class="row2">
+            <label>Телефон <input name="phone" type="tel" placeholder="+998 90 123 45 67"></label>
+            <label>Email <input name="email" type="email" placeholder="name@mail.com"></label>
+            <label>Telegram <input name="telegram" placeholder="@username"></label>
+            <label>LinkedIn / сайт <input name="website" placeholder="linkedin.com/in/…"></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Опыт работы</h3><button type="button" class="btn ghost sm" data-add="experience">+ Добавить</button></div>
+          <div class="list" id="list-experience"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Образование</h3><button type="button" class="btn ghost sm" data-add="education">+ Добавить</button></div>
+          <div class="list" id="list-education"></div>
+        </div>
+
+        <div class="card">
+          <h3>Навыки</h3>
+          <label>Через запятую <textarea name="skills" rows="2" placeholder="Переговоры, B2B‑продажи, управление командой, Excel, CRM"></textarea></label>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Языки</h3><button type="button" class="btn ghost sm" data-add="languages">+ Добавить</button></div>
+          <div class="list" id="list-languages"></div>
+        </div>
+
+        <div class="card" id="aiEditCard" hidden>
+          <div class="card-head"><h3>Текст от ИИ <span class="badge">можно править</span></h3></div>
+          <label>Заголовок профиля <input id="aiHeadline"></label>
+          <label>Профессиональное описание <textarea id="aiSummary" rows="5"></textarea></label>
+          <label>Сильные стороны (по строке: «Заголовок — пояснение»)<textarea id="aiStrengths" rows="4"></textarea></label>
+          <button type="button" class="link-btn danger" id="aiClear">Убрать текст ИИ</button>
+        </div>
+
+        <div class="form-footer">
+          <button type="button" class="btn ghost" id="sampleBtn">Заполнить пример</button>
+          <button type="button" class="btn ghost danger" id="resetBtn">Очистить всё</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ PREVIEW ============ -->
+  <section class="pane pane-preview" id="pane-preview">
+    <div class="toolbar">
+      <div class="seg" role="tablist" id="viewSeg">
+        <button class="seg-btn active" data-view="resume">Резюме</button>
+        <button class="seg-btn" data-view="site">Сайт‑портфолио</button>
+      </div>
+      <div class="tools">
+        <div class="tpl-picker" id="tplPicker" aria-label="Шаблон"></div>
+        <div class="swatches" id="swatches" aria-label="Цвет"></div>
+      </div>
+      <div class="exports">
+        <button class="btn primary" id="pdfBtn">⬇ Скачать PDF</button>
+        <button class="btn ghost" id="printBtn" title="Печать / сохранить как PDF через браузер">⎙ Печать</button>
+        <button class="btn primary" id="siteBtn" hidden>⬇ Скачать сайт (.html)</button>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="paper-wrap" id="paperWrap">
+        <div class="paper-scale" id="paperScale">
+          <article class="cv" id="cv"></article>
+        </div>
+      </div>
+      <div class="site-wrap" id="siteWrap" hidden>
+        <div class="device-switch">
+          <button class="dev active" data-w="100%">Компьютер</button>
+          <button class="dev" data-w="768px">Планшет</button>
+          <button class="dev" data-w="390px">Телефон</button>
+        </div>
+        <div class="frame-holder"><iframe id="siteFrame" title="Предпросмотр сайта"></iframe></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Settings dialog -->
+<dialog id="settingsDlg">
+  <form method="dialog" class="dlg">
+    <h3>Настройки ИИ</h3>
+    <p class="muted">На Vercel ключ хранится на сервере в переменной <code>GEMINI_API_KEY</code> — здесь ничего вводить не нужно. Поле ниже — только для локального запуска без сервера: ключ сохраняется в этом браузере.</p>
+    <label>Gemini API key (необязательно) <input id="keyInput" type="password" placeholder="AIza…" autocomplete="off"></label>
+    <label>Модель <input id="modelInput" placeholder="gemini-flash-latest"></label>
+    <div class="dlg-actions">
+      <button class="btn ghost" value="cancel">Отмена</button>
+      <button class="btn primary" value="ok" id="saveSettings">Сохранить</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/prompt.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
